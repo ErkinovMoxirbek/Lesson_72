@@ -19,5 +19,5 @@ public class StudentEntity {
     private Integer age;
     private Gender gender;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 }

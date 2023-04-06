@@ -22,12 +22,20 @@ public class StudentService {
         StudentEntity entity = new StudentEntity();
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());
+        entity.setAge(dto.getAge());
+        entity.setGender(dto.getGender());
+        entity.setLevel(dto.getLevel());
         if (dto.getName() == null || dto.getName().isBlank()) {
             throw new AppBadRequestException("Name qani?");
         }
         if (dto.getSurname() == null || dto.getSurname().isBlank()) {
             throw new AppBadRequestException("Surname qani?");
+        }if (dto.getAge() == null || dto.getAge() == 0) {
+            throw new AppBadRequestException("age qani?");
+        }if (dto.getLevel() == null) {
+            throw new AppBadRequestException("level qani?");
         }
+        System.out.println(entity.toString());
         studentRepository.save(entity);
         dto.setId(entity.getId());
         return dto;
@@ -66,7 +74,7 @@ public class StudentService {
             entity.setSurname(studentDTO.getSurname());
             System.out.println("update surname");
         }
-        if (studentDTO.getName() != null ){
+        if (studentDTO.getGender() != null ){
             entity.setGender(studentDTO.getGender());
             System.out.println("update gender");
         }

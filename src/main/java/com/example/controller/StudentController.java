@@ -29,16 +29,17 @@ public class StudentController {
     public ResponseEntity<?> getAll (){
         return ResponseEntity.ok(studentService.getAll());
     }
-    @GetMapping(value = "/get-by-id")
+    @GetMapping(value = "/get-by-id/{id}")
     public ResponseEntity<?> getById (@PathVariable("id") Integer id){
         try {
+            System.out.println(id);
             return ResponseEntity.ok(studentService.getById(id));
         }catch (AppBadRequestException e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-name")
+    @GetMapping(value = "/get-by-name/{name}")
     public ResponseEntity<?> getByName (@PathVariable("name") String name){
         try {
             return ResponseEntity.ok(studentService.getByName(name));
@@ -47,7 +48,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-surname")
+    @GetMapping(value = "/get-by-surname/{surname}")
     public ResponseEntity<?> getBySurname (@PathVariable("surname") String surname){
         try {
             return ResponseEntity.ok(studentService.getBySurname(surname));
@@ -56,7 +57,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-level")
+    @GetMapping(value = "/get-by-level/{level}")
     public ResponseEntity<?> getByLevel (@PathVariable("level") Integer level){
         try {
             return ResponseEntity.ok(studentService.getByLevel(level));
@@ -65,7 +66,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-age")
+    @GetMapping(value = "/get-by-age/{age}")
     public ResponseEntity<?> getByAge (@PathVariable("age") Integer age){
         try {
             return ResponseEntity.ok(studentService.getByAge(age));
@@ -74,7 +75,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-gender")
+    @GetMapping(value = "/get-by-gender/{gender}")
     public ResponseEntity<?> getByGender (@PathVariable("gender") Gender gender){
         try {
             return ResponseEntity.ok(studentService.getByGender(gender));
@@ -83,7 +84,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-created-date")
+    @GetMapping(value = "/get-by-created-date/{createdDate}")
     public ResponseEntity<?> getByCreatedDate (@PathVariable("createdDate")LocalDateTime createdDate){
         try {
             return ResponseEntity.ok(studentService.getByCreatedDate(createdDate));
@@ -101,7 +102,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PostMapping(value = "/update")
+    @PostMapping(value = "/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Integer id,@RequestBody StudentDTO studentDTO){
         try {
             return ResponseEntity.ok(studentService.update(id,studentDTO));
@@ -110,7 +111,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id){
         try {
             return ResponseEntity.ok(studentService.delete(id));

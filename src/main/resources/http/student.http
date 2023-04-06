@@ -1,0 +1,32 @@
+### Student create
+PUT localhost:8082/student/create
+Content-Type: application/json
+
+{
+  "name": "Ali",
+  "surname": "Toshmatov",
+  "age": "17",
+  "gender": "Male",
+  "level": "1"
+}
+### Student list
+GET localhost:8082/student/list
+### student get by name
+GET localhost:8082/student/get-by-name/Raxmonali
+### student get by age
+GET localhost:8082/student/get-by-age/17
+### student get by id
+GET localhost:8082/student/get-by-id/1
+### student get by level
+GET localhost:8082/student/get-by-level/1
+### student get by created Date
+GET localhost:8082/student/get-by-created-date/
+### student get by created date between
+GET localhost:8082/student/get-by-between-date
+Content-Type: application/json
+
+{
+  "start": "",
+  "finish": ""
+}
+
