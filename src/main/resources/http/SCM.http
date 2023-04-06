@@ -1,0 +1,9 @@
+### SCM save
+PUT localhost:8082/SCM/create
+Content-Type: application/json
+
+{
+  "studentId": "1",
+  "courseId": "1",
+  "mark": "gold"
+}

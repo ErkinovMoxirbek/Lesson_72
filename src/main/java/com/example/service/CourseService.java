@@ -20,11 +20,14 @@ public class CourseService {
         CourseEntity entity = new CourseEntity();
         entity.setName(dto.getName());
         entity.setPrice(dto.getPrice());
+        entity.setDuration(dto.getDuration());
         if (dto.getName() == null || dto.getName().isBlank()) {
             throw new AppBadRequestException("Name qani?");
         }
         if (dto.getPrice() == null ) {
-            throw new AppBadRequestException("Surname qani?");
+            throw new AppBadRequestException("price qani?");
+        }if (dto.getDuration() == null ) {
+            throw new AppBadRequestException("duration qani?");
         }
         courseRepository.save(entity);
         dto.setId(entity.getId());

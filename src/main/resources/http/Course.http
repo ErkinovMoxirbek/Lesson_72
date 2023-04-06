@@ -4,23 +4,19 @@ Content-Type: application/json
 
 {
   "name": "Ali",
-  "surname": "Toshmatov",
-  "age": "17",
-  "gender": "Male",
-  "level": "1"
+  "price": "100000.0",
+  "duration": "12"
 }
 ### course list
 GET localhost:8082/course/list
 ### course get by name
-GET localhost:8082/course/get-by-name/Raxmonali
-### course get by age
-GET localhost:8082/course/get-by-age/17
+GET localhost:8082/course/get-by-name/Ali
+### course get by duration
+GET localhost:8082/course/get-by-duration/12
 ### course get by id
 GET localhost:8082/course/get-by-id/1
-### course get by level
-GET localhost:8082/course/get-by-level/1
-### course get by created Date
-GET localhost:8082/course/get-by-created-date/
+### course get by price
+GET localhost:8082/course/get-by-price/10000
 ### course get by created date between
 GET localhost:8082/course/get-by-between-date
 Content-Type: application/json
@@ -29,8 +25,8 @@ Content-Type: application/json
   "start": "",
   "finish": ""
 }
-### student get by
-GET localhost:8082/course/get-by-between-date
+### student get by price between
+GET localhost:8082/course/get-by-between-price
 Content-Type: application/json
 
 {

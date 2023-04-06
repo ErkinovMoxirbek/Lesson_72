@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(value = "course")
 public class CourseController {
     @Autowired
     private CourseService service;
@@ -26,7 +27,7 @@ public class CourseController {
     public ResponseEntity<?> getAll (){
         return ResponseEntity.ok(service.getAll());
     }
-    @GetMapping(value = "/get-by-id")
+    @GetMapping(value = "/get-by-id/{id}")
     public ResponseEntity<?> getById (@PathVariable("id") Integer id){
         try {
             return ResponseEntity.ok(service.getById(id));
@@ -35,7 +36,7 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-name")
+    @GetMapping(value = "/get-by-name/{name}")
     public ResponseEntity<?> getByName (@PathVariable("name") String name){
         try {
             return ResponseEntity.ok(service.getByName(name));
@@ -44,8 +45,8 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-price")
-    public ResponseEntity<?> getByPrice (@PathVariable("surname") Double price){
+    @GetMapping(value = "/get-by-price/{price}")
+    public ResponseEntity<?> getByPrice (@PathVariable("price") Double price){
         try {
             return ResponseEntity.ok(service.getByPrice(price));
         }catch (AppBadRequestException e){
@@ -53,8 +54,8 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/get-by-duration")
-    public ResponseEntity<?> getByDuration (@PathVariable("level") Integer duration){
+    @GetMapping(value = "/get-by-duration/{duration}")
+    public ResponseEntity<?> getByDuration (@PathVariable("duration") Integer duration){
         try {
             return ResponseEntity.ok(service.getByDuration(duration));
         }catch (AppBadRequestException e){
@@ -62,7 +63,7 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PostMapping(value = "/update")
+    @PostMapping(value = "/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Integer id,@RequestBody CourseDTO dto){
         try {
             return ResponseEntity.ok(service.update(id,dto));
@@ -71,7 +72,7 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id){
         try {
             return ResponseEntity.ok(service.delete(id));
