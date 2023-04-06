@@ -3,14 +3,12 @@ package com.example.controller;
 import com.example.dto.BetweenDate;
 import com.example.dto.BetweenPrice;
 import com.example.dto.CourseDTO;
-import com.example.enums.Gender;
 import com.example.exp.AppBadRequestException;
 import com.example.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 @RestController
 public class CourseController {
     @Autowired
