@@ -21,6 +21,6 @@ public class StudentCourseMarkEntity {
     private CourseEntity courseId;
     private String mark;
     @Column(name = "created_date")
-    private LocalDateTime localDateTime;
+    private LocalDateTime createdDate = LocalDateTime.now() ;
 
 }

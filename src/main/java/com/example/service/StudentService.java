@@ -55,7 +55,6 @@ public class StudentService {
         });
         return list;
     }
-
     public StudentEntity getById(Integer id) {
         Optional<StudentEntity> optional = studentRepository.findById(id);
         if (optional.isEmpty()){
@@ -63,7 +62,6 @@ public class StudentService {
         }
         return optional.get();
     }
-
     public Boolean update(Integer id, StudentDTO studentDTO) {
         StudentEntity entity = getById(id);
         if (studentDTO.getName() != null ){
@@ -85,13 +83,11 @@ public class StudentService {
         studentRepository.save(entity);
         return true;
     }
-
     public Boolean delete(Integer id) {
         StudentEntity entity = getById(id);
         studentRepository.delete(entity);
         return true;
     }
-
     public StudentEntity getByLevel(Integer level) {
         StudentEntity optional = studentRepository.findByLevel(level);
         if (optional == null){
@@ -99,7 +95,6 @@ public class StudentService {
         }
         return optional;
     }
-
     public StudentEntity getBySurname(String surname) {
         StudentEntity optional = studentRepository.findBySurname(surname);
         if (optional == null){
@@ -107,7 +102,6 @@ public class StudentService {
         }
         return optional;
     }
-
     public StudentEntity getByName(String name) {
         StudentEntity optional = studentRepository.findByName(name);
         if (optional == null){
@@ -115,7 +109,6 @@ public class StudentService {
         }
         return optional;
     }
-
     public StudentEntity getByGender(Gender gender) {
         StudentEntity optional = studentRepository.findByGender(gender);
         if (optional == null){
@@ -123,7 +116,6 @@ public class StudentService {
         }
         return optional;
     }
-
     public StudentEntity getByAge(Integer age) {
         StudentEntity optional = studentRepository.findByAge(age);
         if (optional == null){
@@ -131,7 +123,6 @@ public class StudentService {
         }
         return optional;
     }
-
     public List<StudentEntity> getByCreatedDate(LocalDateTime createdDate) {
         List<StudentEntity> optional = studentRepository.findAllByCreatedDate(createdDate);
         if (optional == null){
@@ -139,7 +130,6 @@ public class StudentService {
         }
         return optional;
     }
-
     public List<StudentEntity> getByBetweenCreatedDate(BetweenDate betweenDate) {
         List<StudentEntity> optional = studentRepository.findAllByCreatedDateBetween(betweenDate.getStart(),betweenDate.getFinish());
         if (optional == null){
