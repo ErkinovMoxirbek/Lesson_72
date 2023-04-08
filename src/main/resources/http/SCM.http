@@ -3,7 +3,30 @@ PUT localhost:8082/SCM/create
 Content-Type: application/json
 
 {
-  "studentId": "1",
-  "courseId": "1",
-  "mark": "gold"
+  "studentId": "3",
+  "courseId": "2",
+  "mark": 3
 }
+### SCM update
+POST localhost:8082/SCM/update/1
+Content-Type: application/json
+
+{
+  "mark": 4
+}
+### SCM get-by-id
+GET localhost:8082/SCM/get-by-id/1
+
+### SCM get-by-student-id
+GET localhost:8082/SCM/get-by-student-id/3
+
+### SCM delete
+DELETE localhost:8082/SCM/delete/1
+### SCM get-by-id-with-detail
+GET localhost:8082/SCM/get-by-id-with-detail/1
+### SCM list
+GET localhost:8082/SCM/list
+### SCM get-by-created-date-with-detail
+GET localhost:8082/SCM/get-by-created-date-with-detail/2023-04-09
+### SCM get-by-student-id-last-mark
+GET localhost:8082/SCM/get-by-student-id-last-mark/3

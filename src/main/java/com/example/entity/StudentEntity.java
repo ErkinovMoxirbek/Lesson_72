@@ -4,10 +4,14 @@ import com.example.enums.Gender;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Getter @Setter
 @Entity
 @Table(name = "student")
+@ToString
 public class StudentEntity {
 //    id,name,surname,level,age,Gender,createdDate
     @Id
@@ -20,7 +24,7 @@ public class StudentEntity {
     private Gender gender;
     private Boolean visible = true;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private LocalDate createdDate = LocalDate.now();
 
     public StudentEntity(Integer id, String name, String surname) {
         this.id = id;

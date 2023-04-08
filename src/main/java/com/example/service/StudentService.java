@@ -9,6 +9,7 @@ import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class StudentService {
         }
         return optional;
     }
-    public List<StudentEntity> getByCreatedDate(LocalDateTime createdDate) {
+    public List<StudentEntity> getByCreatedDate(LocalDate createdDate) {
         List<StudentEntity> optional = studentRepository.findAllByCreatedDate(createdDate);
         if (optional == null){
             throw new AppBadRequestException("Student not found :" + createdDate);

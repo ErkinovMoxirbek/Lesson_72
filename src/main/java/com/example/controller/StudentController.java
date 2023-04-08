@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
@@ -85,7 +86,7 @@ public class StudentController {
         }
     }
     @GetMapping(value = "/get-by-created-date/{createdDate}")
-    public ResponseEntity<?> getByCreatedDate (@PathVariable("createdDate")LocalDateTime createdDate){
+    public ResponseEntity<?> getByCreatedDate (@PathVariable("createdDate") LocalDate createdDate){
         try {
             return ResponseEntity.ok(studentService.getByCreatedDate(createdDate));
         }catch (AppBadRequestException e){

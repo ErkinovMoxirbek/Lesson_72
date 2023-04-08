@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public interface StudentRepository extends CrudRepository<StudentEntity,Integer 
     StudentEntity findByName(String name);
     StudentEntity findByAge(Integer age);
     StudentEntity findByGender(Gender gender);
-    List<StudentEntity> findAllByCreatedDate(LocalDateTime createdDate);
+    List<StudentEntity> findAllByCreatedDate(LocalDate createdDate);
     List<StudentEntity> findAllByCreatedDateBetween(LocalDateTime toCreatedDate,LocalDateTime fromCreatedDate);
     @Override
     boolean existsById(Integer integer);
@@ -66,6 +67,6 @@ public interface StudentRepository extends CrudRepository<StudentEntity,Integer 
     List<StudentEntity> findAllByName2 (String name);
     @Query("select new StudentEntity (id,name,surname) from StudentEntity ")
     List<StudentEntity> findByName4();
-    @Query("SELECT new com.example.mapper.StudentMapper(id,name, phone) FROM StudentEntity ")
-    List<StudentMapper> findByName5();
+//    @Query("SELECT new com.example.mapper.StudentMapper(id,name, phone) FROM StudentEntity ")
+//    List<StudentMapper> findByName5();
 }

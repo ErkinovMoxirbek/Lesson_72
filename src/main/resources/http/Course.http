@@ -3,8 +3,8 @@ PUT localhost:8082/course/create
 Content-Type: application/json
 
 {
-  "name": "Ali",
-  "price": "100000.0",
+  "name": "Math",
+  "price": "140000.0",
   "duration": "12"
 }
 ### course list

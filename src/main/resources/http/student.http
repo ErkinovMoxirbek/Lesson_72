@@ -3,11 +3,11 @@ PUT localhost:8082/student/create
 Content-Type: application/json
 
 {
-  "name": "Ali",
-  "surname": "Toshmatov",
-  "age": "17",
+  "name": "Muhammad Bilol",
+  "surname": "Ahmadjonov",
+  "age": "18",
   "gender": "Male",
-  "level": "1"
+  "level": "3"
 }
 ### Student list
 GET localhost:8082/student/list
