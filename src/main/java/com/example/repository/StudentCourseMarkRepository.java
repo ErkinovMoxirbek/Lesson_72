@@ -69,7 +69,7 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
     @Query(value = "SELECT c.id, c.name " +
             " from  student_course_mark as scm " +
             " inner join course_t as c on c.id = scm.course_id " +
-            " where scm.student_id = :stude         ntId  " +
+            " where scm.student_id = :studentId  " +
             "order by scm.created_date desc limit 1 ", nativeQuery = true)
     List<Object[]> findLastCourseMarkerAsNative(@Param("studentId") Integer studentId);
     @Query(value = "SELECT scm.student_id as sId, scm.mark as mark, " +
@@ -79,4 +79,5 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
             " where scm.student_id = :studentId  " +
             "order by scm.created_date desc limit 1 ", nativeQuery = true)
     CourseInfoMapper findLastCourseMarkerAsNativeMapping(@Param("studentId") Integer studentId);
+
 }

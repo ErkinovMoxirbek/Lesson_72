@@ -34,7 +34,7 @@ public interface StudentRepository extends CrudRepository<StudentEntity,Integer 
     StudentEntity findByAge(Integer age);
     StudentEntity findByGender(Gender gender);
     List<StudentEntity> findAllByCreatedDate(LocalDate createdDate);
-    List<StudentEntity> findAllByCreatedDateBetween(LocalDateTime toCreatedDate,LocalDateTime fromCreatedDate);
+    List<StudentEntity> findAllByCreatedDateBetween(LocalDate toCreatedDate,LocalDate fromCreatedDate);
     @Override
     boolean existsById(Integer integer);
 
