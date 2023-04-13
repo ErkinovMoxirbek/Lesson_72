@@ -74,7 +74,7 @@ public class CourseService {
         }
         return optional.get();
     }
-    public Boolean updateById(Integer id, CourseDTO courseDto) {
+    public Boolean update(Integer id, CourseDTO courseDto) {
         CourseEntity entity = get(id);
 
         if (entity == null) {
@@ -89,7 +89,7 @@ public class CourseService {
         courseRepository.save(entity);
         return true;
     }
-    public Boolean deleteById(Integer id) {
+    public Boolean delete(Integer id) {
         CourseEntity entity = get(id);
 
         if (entity == null) {
@@ -113,7 +113,7 @@ public class CourseService {
         }
         return toDTO(list);
     }
-    public List<CourseDTO> getByDuration(String duration) {
+    public List<CourseDTO> getByDuration(Integer duration) {
         List<CourseEntity> list = courseRepository.findByDuration(duration);
         if (list.isEmpty()) {
             throw new AppBadRequestException("No course found with this duration: " + duration);
@@ -121,7 +121,7 @@ public class CourseService {
         return toDTO(list);
     }
 
-    public List<CourseDTO> getByCourseListPriceBetween(Double price1, Double price2) {
+    public List<CourseDTO> getByBetweenPrice(Double price1, Double price2) {
         List<CourseEntity> list = courseRepository.findByPriceBetween(price1, price2);
         if (list.isEmpty()) {
             throw new AppBadRequestException("No course found with this prices between: ");
@@ -129,7 +129,7 @@ public class CourseService {
         return toDTO(list);
     }
 
-    public List<CourseDTO> getByCourseListCreatedDateBetween(LocalDate date1, LocalDate date2) {
+    public List<CourseDTO> getByBetweenCreatedDate(LocalDate date1, LocalDate date2) {
         List<CourseEntity> list = courseRepository.findByCreatedDateBetween(date1, date2);
         if (list.isEmpty()) {
             throw new AppBadRequestException("No course found with this createdDate between: ");

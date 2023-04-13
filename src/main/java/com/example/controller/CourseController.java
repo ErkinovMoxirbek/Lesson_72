@@ -87,7 +87,7 @@ public class CourseController {
     @GetMapping(value = "/get-by-between-price")
     public ResponseEntity<?> getByBetweenDate (@RequestBody BetweenPrice betweenPrice){
         try {
-            return ResponseEntity.ok(service.getByBetweenPrice(betweenPrice));
+            return ResponseEntity.ok(service.getByBetweenPrice(betweenPrice.getFinish(),betweenPrice.getFinish()));
         }catch (AppBadRequestException e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -96,7 +96,7 @@ public class CourseController {
     @GetMapping(value = "/get-by-between-date")
     public ResponseEntity<?> getByBetweenDate (@RequestBody BetweenDate betweenDate){
         try {
-            return ResponseEntity.ok(service.getByBetweenCreatedDate(betweenDate));
+            return ResponseEntity.ok(service.getByBetweenCreatedDate(betweenDate.getStart(),betweenDate.getFinish()));
         }catch (AppBadRequestException e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -16,7 +16,7 @@ public interface CourseRepository  extends CrudRepository<CourseEntity,Integer >
         PagingAndSortingRepository<CourseEntity, Integer>{
         List<CourseEntity> findByName(String name);
         List<CourseEntity> findByPrice(Double price);
-        List<CourseEntity> findByDuration(String duration);
+        List<CourseEntity> findByDuration(Integer duration);
         List<CourseEntity> findByCreatedDateBetween(LocalDate date1, LocalDate date2);
 
         List<CourseEntity> findByPriceBetween(Double price1, Double price2);
@@ -24,5 +24,5 @@ public interface CourseRepository  extends CrudRepository<CourseEntity,Integer >
 
         Page<CourseEntity> findByCreatedDateBetween(LocalDate date1, LocalDate date2, Pageable pageable);
 
-    Page<CourseEntity> findAll(Pageable pageable);
+
 }

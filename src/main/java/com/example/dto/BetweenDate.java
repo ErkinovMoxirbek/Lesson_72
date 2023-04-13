@@ -3,9 +3,10 @@ package com.example.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Getter @Setter
 public class BetweenDate {
-    private LocalDateTime start;
-    private LocalDateTime finish;
+    private LocalDate start;
+    private LocalDate finish;
 }
