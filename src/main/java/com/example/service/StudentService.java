@@ -148,7 +148,7 @@ public class StudentService {
         return toDTO(list);
     }
     public List<StudentDTO> getByCreatedDate(LocalDate date) {
-        List<StudentEntity> list = studentRepository.findByBirthDate(date);
+        List<StudentEntity> list = studentRepository.findByCreatedDate(date);
         if (list.isEmpty()){
             throw new AppBadRequestException("No student with this gender was found: " + date);
         }
@@ -156,7 +156,7 @@ public class StudentService {
     }
 
     public List<StudentDTO> getByBetweenCreatedDate(LocalDate date1, LocalDate date2) {
-        List<StudentEntity> list = studentRepository.findByBirthDateBetween(date1, date2);
+        List<StudentEntity> list = studentRepository.findByCreatedDateBetween(date1, date2);
         if (list.isEmpty()){
             throw new AppBadRequestException("No student with this gender was found: ");
         }
@@ -164,7 +164,7 @@ public class StudentService {
     }
 
     public Page<StudentDTO> pagination(int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "birthDate");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable paging = PageRequest.of(page - 1, size, sort);
         Page<StudentEntity> pageObj = studentRepository.findAll(paging);
 
@@ -190,7 +190,7 @@ public class StudentService {
     }
 
     public Page<StudentDTO> paginationWithName(String name, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "birthDate");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable paging = PageRequest.of(page - 1, size, sort);
         Page<StudentEntity> pageObj = studentRepository.findAllByName(name, paging);
 
@@ -236,7 +236,7 @@ public class StudentService {
     }
 
     public Page<StudentDTO> paginationWithGender(Gender gender, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "birthDate");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable paging = PageRequest.of(page - 1, size, sort);
 
         Page<StudentEntity> pageObj = studentRepository.findAllByGender(gender, paging);

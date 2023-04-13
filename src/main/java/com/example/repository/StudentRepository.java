@@ -22,10 +22,10 @@ public interface StudentRepository extends CrudRepository<StudentEntity,Integer 
         List<StudentEntity> findBySurname(String surname);
         List<StudentEntity> findByLevel(Integer level);
         List<StudentEntity> findByAge(Integer age);
-        List<StudentEntity> findByBirthDate(LocalDate date);
+        List<StudentEntity> findByCreatedDate(LocalDate date);
         List<StudentEntity> findByName(String name);
         List<StudentEntity> findByGender(Gender gender);
-        List<StudentEntity> findByBirthDateBetween(LocalDate date1, LocalDate date2);
+        List<StudentEntity> findByCreatedDateBetween(LocalDate date1, LocalDate date2);
         Page<StudentEntity> findAllByName(String name, Pageable pageable);
 
         Page<StudentEntity> findAllByLevel(Integer level, Pageable paging);

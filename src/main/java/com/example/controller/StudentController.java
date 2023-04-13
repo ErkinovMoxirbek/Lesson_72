@@ -135,6 +135,13 @@ public class StudentController {
         Page<StudentDTO> response = studentService.paginationWithLevel(level, page, size);
         return ResponseEntity.ok(response);
     }
+    @PostMapping (value = "/paging-name/{name}")
+    public ResponseEntity<Page<StudentDTO>> paginationWithName(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                            @RequestParam(value = "size", defaultValue = "3") int size,
+                                                            @PathVariable("name") String name) {
+        Page<StudentDTO> response = studentService.paginationWithName(name, page, size);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping(value = "/paging-gender/{gender}")
     public ResponseEntity<Page<StudentDTO>> pagingWithGender(@RequestParam(value = "page", defaultValue = "1") int page,

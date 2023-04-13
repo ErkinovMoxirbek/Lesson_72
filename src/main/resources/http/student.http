@@ -29,4 +29,21 @@ Content-Type: application/json
   "start": "",
   "finish": ""
 }
+### Student pagination
+GET http://localhost:8082/student/paging
+
+### Student pagination with name
+POST localhost:8082/student/paging-name?page=1&size=6
+Content-Type:  application/json
+
+{
+  "name": "Ali"
+}
+
+
+### Student paging by given level
+GET http://localhost:8082/student/paging-level/1
+
+### Student paging by given gender
+GET http://localhost:8082/student/paging-gender/Male
 
