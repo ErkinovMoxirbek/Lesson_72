@@ -202,10 +202,6 @@ public class StudentService {
             dto.setId(entity.getId());
             dto.setName(entity.getName());
             dto.setSurname(entity.getSurname());
-            dto.setLevel(entity.getLevel());
-            dto.setAge(entity.getAge());
-            dto.setCreatedDate(entity.getCreatedDate());
-            dto.setGender(entity.getGender());
             dtoList.add(dto);
         }
         Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
@@ -213,7 +209,7 @@ public class StudentService {
     }
 
     public Page<StudentDTO> paginationWithLevel(Integer level, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "level");
         Pageable paging = PageRequest.of(page - 1, size, sort);
         Page<StudentEntity> pageObj = studentRepository.findAllByLevel(level, paging);
 

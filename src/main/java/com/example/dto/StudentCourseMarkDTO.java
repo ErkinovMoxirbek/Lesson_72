@@ -3,7 +3,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Setter
@@ -16,5 +15,5 @@ public class StudentCourseMarkDTO {
     private String StudentName;
     private String StudentSurname;
     private String CourseName;
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 }

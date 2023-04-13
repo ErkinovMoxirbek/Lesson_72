@@ -102,26 +102,26 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping(value = "/pagingById")
+    @PostMapping (value = "/pagingById")
     public ResponseEntity<Page<CourseDTO>> pagingpagingById(@RequestParam(value = "page", defaultValue = "1") int page,
                                                             @RequestParam(value = "size", defaultValue = "3") int size) {
         return ResponseEntity.ok(service.paginationById(page, size));
     }
 
-    @GetMapping(value = "/pagingByCreatedDate")
+    @PostMapping(value = "/pagingByCreatedDate")
     public ResponseEntity<Page<CourseDTO>> pagingpagingByCreatedDate(@RequestParam(value = "page", defaultValue = "2") int page,
                                                                      @RequestParam(value = "size", defaultValue = "2") int size) {
         return ResponseEntity.ok(service.paginationByCreatedDate(page, size));
     }
 
-    @GetMapping(value = "/pagingByPriceWithCreatedDate/{price}")
+    @PostMapping(value = "/pagingByPriceWithCreatedDate/{price}")
     public ResponseEntity<Page<CourseDTO>> pagingByPriceWithCreatedDate(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                         @RequestParam(value = "size", defaultValue = "2") int size,
                                                                         @PathVariable ("price") Double price) {
         return ResponseEntity.ok(service.pagingByPriceWithCreatedDate(price, page, size));
     }
 
-    @GetMapping(value = "/pagingByPricesWithCreatedDatesBetween/{price1}/{price2}")
+    @PostMapping(value = "/pagingByPricesWithCreatedDatesBetween/{price1}/{price2}")
     public ResponseEntity<Page<CourseDTO>> pagingByPricesWithCreatedDatesBetween(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                                  @RequestParam(value = "size", defaultValue = "5") int size,
                                                                                  @PathVariable ("price1") LocalDate date1,

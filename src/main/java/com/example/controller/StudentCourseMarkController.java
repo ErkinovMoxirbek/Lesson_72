@@ -1,149 +1,139 @@
 package com.example.controller;
 
-import com.example.dto.CourseDTO;
 import com.example.dto.StudentCourseMarkDTO;
-import com.example.exp.AppBadRequestException;
-import com.example.service.CourseService;
+import com.example.entity.CourseEntity;
+import com.example.entity.StudentEntity;
 import com.example.service.StudentCourseMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/SCM")
 public class StudentCourseMarkController {
     @Autowired
     private StudentCourseMarkService service;
-    @PutMapping(value = "/create")
-    public ResponseEntity<?> create (@RequestBody StudentCourseMarkDTO dto){
-        try {
-            return ResponseEntity.ok(service.create(dto));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping (value = "/create")
+    public ResponseEntity<?> create(@RequestBody StudentCourseMarkDTO dto) {
+        return ResponseEntity.ok(service.create(dto));
     }
-    @PostMapping(value = "/update/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Integer id,@RequestBody StudentCourseMarkDTO dto){
-        try {
-            return ResponseEntity.ok(service.update(id,dto));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<?> update(@PathVariable ("id") Integer id,
+                                    @RequestBody StudentCourseMarkDTO dto) {
+        return ResponseEntity.ok(service.update(id, dto));
     }
-    @GetMapping(value = "/get-by-id/{id}")
-    public ResponseEntity<?> getById (@PathVariable("id") Integer id){
-        try {
-            return ResponseEntity.ok(service.getById(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }  @GetMapping(value = "/get-by-student-id/{id}")
-    public ResponseEntity<?> getByStudentId (@PathVariable("id") Integer id){
-        try {
-            return ResponseEntity.ok(service.getByStudentId(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }  @GetMapping(value = "/get-by-course-id/{id}")
-    public ResponseEntity<?> getByCourseId (@PathVariable("id") Integer id){
-        try {
-            return ResponseEntity.ok(service.getByCourseId(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }  @GetMapping(value = "/get-by-mark/{mark}")
-    public ResponseEntity<?> getByMark (@PathVariable("mark") Integer mark){
-        try {
-            return ResponseEntity.ok(service.getByMark(mark));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    } @GetMapping(value = "/get-by-created-date/{date}")
-    public ResponseEntity<?> getByCreatedDate (@PathVariable("date") LocalDate date){
-        try {
-            return ResponseEntity.ok(service.getByCreatedDate(date));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @GetMapping(value = "/getById/{id}")
+    public ResponseEntity<?> getById(@PathVariable ("id") Integer id) {
+        return ResponseEntity.ok(service.getById(id));
     }
-    @GetMapping(value = "/get-by-id-with-detail/{id}")
-    public ResponseEntity<?> getByIdWithDetail(@PathVariable ("id") Integer id) {
-        try {
-            return ResponseEntity.ok(service.getByIdWithDetail(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    } @GetMapping(value = "/get-by-created-date-with-detail/{date}")
-    public ResponseEntity<?> getByCreatedDateWithDetail(@PathVariable ("date") LocalDate date) {
-        try {
-            return ResponseEntity.ok(service.getByCreatedDateWithDetail(date));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @GetMapping(value = "/getByIdWithDetail/{id}")
+    public ResponseEntity<List<StudentCourseMarkDTO>> getByIdWithDetail(@PathVariable ("id") Integer id) {
+        return ResponseEntity.ok(service.getByIdWithDetail(id));
     }
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<?> delete (@PathVariable Integer id){
-        try {
-            return ResponseEntity.ok(service.delete(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @DeleteMapping(value = "/deleteById/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable ("id") Integer id) {
+        return ResponseEntity.ok(service.deleteById(id));
     }
+
     @GetMapping(value = "/list")
-    public ResponseEntity<?> list(){
+    public ResponseEntity<List<StudentCourseMarkDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
-    @GetMapping("/get-by-created-date-between-with-detail")
-    public ResponseEntity<?> getByCreatedDateBetweenWithDetail(@RequestParam("to") LocalDate to,
-                                                              @RequestParam("from") LocalDate from) {
-        return ResponseEntity.ok(service.getByCreatedDateBetweenWithDetail(to,from));
+
+    @GetMapping(value = "/getByDate")
+    public ResponseEntity<?> getByDate(@RequestParam("studentId") Integer id, @RequestParam("created_date") LocalDateTime created_date){
+        StudentEntity student = new StudentEntity();
+        student.setId(id);
+        StudentCourseMarkDTO dto = service.getByDate(student, created_date);
+        return ResponseEntity.ok(dto);
     }
-    @GetMapping(value = "/get-by-sudent-id-all-mark/{id}")
-    public ResponseEntity<?> getByStudentIdAllMark(@PathVariable("id")Integer id){
-        try {
-            return ResponseEntity.ok(service.getByStudentIdAllMark(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @GetMapping(value = "/getBetweenDate")
+    private ResponseEntity<List<StudentCourseMarkDTO>> getBetweenDate(@RequestParam("studentId") Integer sId,
+                                                                  @RequestParam("fromDate") LocalDateTime fromDate,
+                                                                  @RequestParam("toDate") LocalDateTime toDate){
+        StudentEntity student = new StudentEntity();
+        student.setId(sId);
+        List<StudentCourseMarkDTO> dto = service.
+                getStudentCourseMarkListBetweenDates(student, fromDate, toDate);
+        return ResponseEntity.ok(dto);
     }
-    @GetMapping(value = "/get-by-course-id-all-mark/{id}")
-    public ResponseEntity<?> getByCourseIdAllMark(@PathVariable("id")Integer id){
-        try {
-            return ResponseEntity.ok(service.getByCourseIdAllMark(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @GetMapping(value = "/getAllMark")
+    private ResponseEntity<List<StudentCourseMarkDTO>> getAllMark(@RequestParam("studentId") Integer sId){
+        StudentEntity student = new StudentEntity();
+        student.setId(sId);
+        List<StudentCourseMarkDTO> dto = service.getAllStudentMark(student);
+        return ResponseEntity.ok(dto);
     }
-    @GetMapping(value = "/get-by-student-id-last-mark/{id}")
-    public ResponseEntity<?> getByStudentIdLastMark(@PathVariable("id")Integer id){
-        try {
-            return ResponseEntity.ok(service.getByStudentIdLastMark(id));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    } @GetMapping(value = "/get-by-student-id-and-course-id-max-mark")
-    public ResponseEntity<?> getByStudentIdAndCourseIdMaxMark(@RequestParam("student_id") Integer sid,@RequestParam("course_id")Integer cid){
-        try {
-            return ResponseEntity.ok(service.getByStudentIdAndCourseIdMaxMark(sid,cid));
-        }catch (AppBadRequestException e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @GetMapping(value = "/getDateMark")
+    private ResponseEntity<List<StudentCourseMarkDTO>> getAllMark(@RequestParam("studentId") Integer sId,
+                                                              @RequestParam("courseId") Integer cId){
+        StudentEntity student = new StudentEntity();
+        student.setId(sId);
+        CourseEntity course = new CourseEntity();
+        course.setId(cId);
+        List<StudentCourseMarkDTO> dto = service.getDateMark(student,course);
+        return ResponseEntity.ok(dto);
+    }
+    @GetMapping(value = "/getTopMark/{id}")
+    public ResponseEntity<?> getFirstMark(@PathVariable("id") Integer id) {
+        StudentEntity student = new StudentEntity();
+        student.setId(id);
+        StudentCourseMarkDTO dto = service.getFirstMark(student);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(value = "/getLastMark/{id}")
+    public ResponseEntity<?> getLastMark(@PathVariable("id") Integer id) {
+        StudentEntity student = new StudentEntity();
+        student.setId(id);
+        StudentCourseMarkDTO dto = service.getLastMark(student);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(value = "/getStudentCourseFirstMark")
+    public ResponseEntity<?> getLastMark(@RequestParam("studentId") Integer sId,
+                                         @RequestParam("courseId") Integer cId) {
+        StudentEntity student = new StudentEntity();
+        student.setId(sId);
+        CourseEntity course = new CourseEntity();
+        course.setId(cId);
+        StudentCourseMarkDTO dto = service.getStudentCurseFirstMark(student, course);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(value = "/countCourseMark")
+    public ResponseEntity<?> countCourseMark(@RequestParam("courseId") Integer cId) {
+        CourseEntity course = new CourseEntity();
+        course.setId(cId);
+        Integer count = service.countCourseMark( course);
+        return ResponseEntity.ok(count);
+    }
+    @PostMapping(value = "/paging")
+    public ResponseEntity<Page<StudentCourseMarkDTO>> paging(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                         @RequestParam(value = "size", defaultValue = "3") int size) {
+        return ResponseEntity.ok(service.pagination(page, size));
+    }
+
+    @PostMapping(value = "/pagingByStudentIdWithCreatedDate/{student_id}")
+    public ResponseEntity<Page<StudentCourseMarkDTO>> pagingByStudentIdWithCreatedDate(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                                   @RequestParam(value = "size", defaultValue = "2") int size,
+                                                                                   @PathVariable ("student_id") Integer id) {
+        return ResponseEntity.ok(service.pagingByStudentIdWithCreatedDate(id, page, size));
+    }
+
+    @PostMapping(value = "/pagingByCourseIdWithCreatedDate/{course_id}")
+    public ResponseEntity<Page<StudentCourseMarkDTO>> pagingByIdWithCreatedDate(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                            @RequestParam(value = "size", defaultValue = "2") int size,
+                                                                            @PathVariable ("course_id") Integer id) {
+        return ResponseEntity.ok(service.pagingByCourseIdWithCreatedDate(id, page, size));
     }
 }

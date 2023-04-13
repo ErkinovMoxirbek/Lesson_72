@@ -19,10 +19,17 @@ public class StudentCourseMarkEntity {
     private Integer id;
     @Column(name = "student_id")
     private Integer studentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    private StudentEntity student;
+
     @Column(name = "course_id")
     private Integer courseId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", updatable = false, insertable = false)
+    private CourseEntity course;
     private Integer mark;
     @Column(name = "created_date")
-    private LocalDate createdDate = LocalDate.now() ;
+    private LocalDateTime createdDate = LocalDateTime.now() ;
 
 }

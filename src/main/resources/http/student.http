@@ -30,7 +30,7 @@ Content-Type: application/json
   "finish": ""
 }
 ### Student pagination
-GET http://localhost:8082/student/paging
+POST http://localhost:8082/student/paging
 
 ### Student pagination with name
 POST localhost:8082/student/paging-name?page=1&size=6
@@ -42,8 +42,8 @@ Content-Type:  application/json
 
 
 ### Student paging by given level
-GET http://localhost:8082/student/paging-level/1
+POST http://localhost:8082/student/paging-level/1
 
 ### Student paging by given gender
-GET http://localhost:8082/student/paging-gender/Male
+POST http://localhost:8082/student/paging-gender/Male
 

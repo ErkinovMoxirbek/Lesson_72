@@ -1,34 +1,61 @@
-### SCM save
-PUT localhost:8082/SCM/create
+### StudentCourse create
+POST localhost:8082/SCM/create
 Content-Type: application/json
 
 {
-  "studentId": "26",
-  "courseId": "2",
-  "mark": 3
+  "studentId": 1,
+  "courseId": 2,
+  "mark": "5"
 }
-### SCM update
-POST localhost:8082/SCM/update/1
+
+### StudentCourse update
+PUT localhost:8082/SCM/update/1
 Content-Type: application/json
 
 {
-  "mark": 4
+  "studentId": 1,
+  "courseId": 1,
+  "mark": "2"
 }
-### SCM get-by-id
-GET localhost:8082/SCM/get-by-id/1
 
-### SCM get-by-student-id
-GET localhost:8082/SCM/get-by-student-id/3
+### StudentCourse getById
+GET localhost:8082/SCM/getById/1
 
-### SCM delete
-DELETE localhost:8082/SCM/delete/1
-### SCM get-by-id-with-detail
-GET localhost:8082/SCM/get-by-id-with-detail/1
-### SCM list
-GET localhost:8082/SCM/list
-### SCM get-by-created-date-with-detail
-GET localhost:8082/SCM/get-by-created-date-with-detail/2023-04-09
-### SCM get-by-student-id-last-mark
-GET localhost:8082/SCM/get-by-student-id-last-mark/3
-### SCM get-by-student-id-and-course-id-max-mark
-GET localhost:8082/SCM/get-by-student-id-and-course-id-max-mark?student_id=3&course_id=2
+### StudentCourseDetail getById
+GET http://localhost:8082/SCM/getByIdWithDetail/1
+
+### StudentCourse deleteById
+DELETE http://localhost:8082/SCM/deleteById/2
+
+### StudentCourse list
+GET http://localhost:8082/SCM/list
+
+### StudentCourse getByDate
+GET localhost:8082/SCM/getByDate/3/2023-04-06 15:33:05.905722
+
+### StudentCourse getByBetweenDate
+GET localhost:8082/SCM/getBetweenDate?studentId=1&fromDate=2022-01-01&toDate=2022-01-03
+
+### StudentCourse getByAllMark
+GET localhost:8082/SCM/getAllMark?studentId=1
+
+### StudentCourse getFirstMark
+GET localhost:8082/SCM/getTopMark/1
+
+### StudentCourse getLastMark
+GET localhost:8082/SCM/getLastMark/1
+
+### StudentCourse getCourseFirstMark
+GET localhost:8082/SCM/getStudentCourseFirstMark?studentId=1&courseId=1
+
+### StudentCourse getCountCourseMark
+GET localhost:8082/SCM/countCourseMark?courseId=1
+
+### StudentCourse paging
+POST http://localhost:8082/SCM/paging
+
+### StudentCourse paging with student id
+POST http://localhost:8082/SCM/pagingByStudentIdWithCreatedDate/1
+
+### StudentCourse paging with course id
+POST http://localhost:8082/SCM/pagingByCourseIdWithCreatedDate/2
