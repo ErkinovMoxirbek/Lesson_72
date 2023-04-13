@@ -7,14 +7,10 @@ import com.example.enums.Gender;
 import com.example.exp.AppBadRequestException;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -23,159 +19,243 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
-    public StudentDTO create(StudentDTO dto) {
+    public Integer create(StudentDTO dto) {
         StudentEntity entity = new StudentEntity();
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());
         entity.setAge(dto.getAge());
-        entity.setGender(dto.getGender());
+        entity.setCreatedDate(dto.getCreatedDate());
         entity.setLevel(dto.getLevel());
-        if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new AppBadRequestException("Name qani?");
-        }
-        if (dto.getSurname() == null || dto.getSurname().isBlank()) {
-            throw new AppBadRequestException("Surname qani?");
-        }if (dto.getAge() == null || dto.getAge() == 0) {
-            throw new AppBadRequestException("age qani?");
-        }if (dto.getLevel() == null) {
-            throw new AppBadRequestException("level qani?");
-        }
-        System.out.println(entity.toString());
+        entity.setGender(dto.getGender());
+
         studentRepository.save(entity);
+        return entity.getId();
+    }
+
+    public List<StudentDTO> getAll() {
+        Iterable<StudentEntity> iterable = studentRepository.findAll();
+        List<StudentDTO> dtoList = new LinkedList<>();
+
+        for (StudentEntity entity : iterable) {
+            StudentDTO dto = new StudentDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setSurname(entity.getSurname());
+            dto.setAge(entity.getAge());
+            dto.setLevel(entity.getLevel());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setGender(entity.getGender());
+
+            dtoList.add(dto);
+        };
+        return dtoList;
+    }
+
+    public StudentDTO getById(Integer id) {
+        StudentEntity entity = get(id);
+        StudentDTO dto = new StudentDTO();
         dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setSurname(entity.getSurname());
+        dto.setAge(entity.getAge());
+        dto.setLevel(entity.getLevel());
+        dto.setCreatedDate(entity.getCreatedDate());
+        dto.setGender(entity.getGender());
         return dto;
     }
-    public List<StudentEntity> getAll() {
-        Iterable<StudentEntity> iterable = studentRepository.findAll();
-        List<StudentEntity> list = new LinkedList<>();
-        iterable.forEach(studentEntity -> {
-            StudentEntity entity  = new StudentEntity();
-            entity.setName(studentEntity.getName());
-            entity.setSurname(studentEntity.getSurname());
-            entity.setCreatedDate(studentEntity.getCreatedDate());
-            entity.setGender(studentEntity.getGender());
-            entity.setAge(studentEntity.getAge());
-            entity.setId(studentEntity.getId());
-            list.add(entity);
-        });
-        return list;
+    public List<StudentDTO> toDTO(List<StudentEntity> list){
+        List<StudentDTO> dtos = new LinkedList<>();
+        for(StudentEntity entity : list){
+            StudentDTO dto = new StudentDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setSurname(entity.getSurname());
+            dto.setAge(entity.getAge());
+            dto.setLevel(entity.getLevel());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setGender(entity.getGender());
+            dtos.add(dto);
+        }
+        return dtos;
     }
-    public StudentEntity getById(Integer id) {
+    public StudentEntity get(Integer id) {
         Optional<StudentEntity> optional = studentRepository.findById(id);
-        if (optional.isEmpty()){
-            throw new AppBadRequestException("Student not found :" + id);
+        if (optional.isEmpty()) {
+            throw new AppBadRequestException("Student not found: " + id);
         }
         return optional.get();
     }
-    public Boolean update(Integer id, StudentDTO studentDTO) {
-        StudentEntity entity = getById(id);
-        if (studentDTO.getName() != null ){
-            entity.setName(studentDTO.getName());
-            System.out.println("update name");
+    public Boolean update(Integer id, StudentDTO studentDto) {
+        StudentEntity entity = get(id);
+
+        if (entity == null) {
+            throw new AppBadRequestException("Student not found: " + id);
         }
-        if (studentDTO.getSurname() != null){
-            entity.setSurname(studentDTO.getSurname());
-            System.out.println("update surname");
-        }
-        if (studentDTO.getGender() != null ){
-            entity.setGender(studentDTO.getGender());
-            System.out.println("update gender");
-        }
-        if (studentDTO.getAge() != null ){
-            entity.setAge(studentDTO.getAge());
-            System.out.println("update age");
-        }
+
+        entity.setName(studentDto.getName());
+        entity.setSurname(studentDto.getSurname());
+        entity.setAge(studentDto.getAge());
+        entity.setCreatedDate(studentDto.getCreatedDate());
+        entity.setLevel(studentDto.getLevel());
+        entity.setGender(studentDto.getGender());
+
         studentRepository.save(entity);
         return true;
     }
     public Boolean delete(Integer id) {
-        StudentEntity entity = getById(id);
+        StudentEntity entity = get(id);
+
+        if (entity == null) {
+            throw new AppBadRequestException("Student not found: " + id);
+        }
         studentRepository.delete(entity);
         return true;
     }
-    public StudentEntity getByLevel(Integer level) {
-        StudentEntity optional = studentRepository.findByLevel(level);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + level);
+
+    public List<StudentDTO> getByName(String name) {
+        List<StudentEntity> list = studentRepository.findByName(name);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No student with this name was found: " + name);
         }
-        return optional;
+        return toDTO(list);
     }
-    public StudentEntity getBySurname(String surname) {
-        StudentEntity optional = studentRepository.findBySurname(surname);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + surname);
+    public List<StudentDTO> getBySurname(String surname) {
+        List<StudentEntity> list = studentRepository.findBySurname(surname);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No student with this surname was found: " + surname);
         }
-        return optional;
+        return toDTO(list);
     }
-    public StudentEntity getByName(String name) {
-        StudentEntity optional = studentRepository.findByName(name);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + name);
+    public List<StudentDTO> getByLevel(Integer level) {
+        List<StudentEntity> list = studentRepository.findByLevel(level);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No student with this level was found: " + level);
         }
-        return optional;
+        return toDTO(list);
     }
-    public StudentEntity getByGender(Gender gender) {
-        StudentEntity optional = studentRepository.findByGender(gender);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + gender);
+    public List<StudentDTO> getByAge(Integer age) {
+        List<StudentEntity> list = studentRepository.findByAge(age);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No student with this age was found: " + age);
         }
-        return optional;
+        return toDTO(list);
     }
-    public StudentEntity getByAge(Integer age) {
-        StudentEntity optional = studentRepository.findByAge(age);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + age);
+    public List<StudentDTO> getByGender(Gender gender) {
+        List<StudentEntity> list = studentRepository.findByGender(gender);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No student with this gender was found: " + gender);
         }
-        return optional;
+        return toDTO(list);
     }
-    public List<StudentEntity> getByCreatedDate(LocalDate createdDate) {
-        List<StudentEntity> optional = studentRepository.findAllByCreatedDate(createdDate);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + createdDate);
+    public List<StudentDTO> getByCreatedDate(LocalDate date) {
+        List<StudentEntity> list = studentRepository.findByBirthDate(date);
+        if (list.isEmpty()){
+            throw new AppBadRequestException("No student with this gender was found: " + date);
         }
-        return optional;
+        return toDTO(list);
     }
-    public List<StudentEntity> getByBetweenCreatedDate(BetweenDate betweenDate) {
-        List<StudentEntity> optional = studentRepository.findAllByCreatedDateBetween(betweenDate.getStart(),betweenDate.getFinish());
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + betweenDate.toString());
+
+    public List<StudentDTO> getByBetweenCreatedDate(LocalDate date1, LocalDate date2) {
+        List<StudentEntity> list = studentRepository.findByBirthDateBetween(date1, date2);
+        if (list.isEmpty()){
+            throw new AppBadRequestException("No student with this gender was found: ");
         }
-        return optional;
+        return toDTO(list);
     }
-//    public void pagingEntity(int page, int size){
-//        Sort sort = Sort.by(Sort.Direction.DESC,"createdDate");
-//        Pageable paginng = PageRequest.of(page - 1,size,sort);
-//        Page<StudentEntity> pageObj = studentRepository.findAll(paginng);
-//
-//        Long totalCount = pageObj.getTotalElements();
-//
-//        List<StudentEntity> entityList = new LinkedList<>();
-//        List<StudentDTO> dtoList = new LinkedList<>();
-//
-//        for (StudentEntity entity : entityList) {
-//            StudentDTO dto = new StudentDTO();
-//            dto.setId(entity.getId());
-//            dto.setName(entity.getName());
-//            dto.setSurname(entity.getSurname());
-//            dtoList.add(dto);
-//        }
-//    }
-//    public Page<StudentDTO> paginationWithName(String name, int page, int size) {
-//        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-//        Pageable paging = PageRequest.of(page - 1, size, sort);
-//        Page<StudentEntity> pageObj = studentRepository.findAllByName(name, paging);
-//
-//        Long totalCount = pageObj.getTotalElements();
-//        List<StudentEntity> entityList = pageObj.getContent();
-//        List<StudentDTO> dtoList = new LinkedList<>();
-//        for (StudentEntity entity : entityList) {
-//            StudentDTO dto = new StudentDTO();
-//            dto.setId(entity.getId());
-//            dto.setName(entity.getName());
-//            dto.setSurname(entity.getSurname());
-//            dtoList.add(dto);
-//        }
-//        Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
-//        return response;
-//    }
+
+    public Page<StudentDTO> pagination(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "birthDate");
+        Pageable paging = PageRequest.of(page - 1, size, sort);
+        Page<StudentEntity> pageObj = studentRepository.findAll(paging);
+
+        Long totalCount = pageObj.getTotalElements();
+
+        List<StudentEntity> entityList = pageObj.getContent();
+        List<StudentDTO> dtoList = new LinkedList<>();
+
+        for (StudentEntity entity : entityList) {
+            StudentDTO dto = new StudentDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setSurname(entity.getSurname());
+            dto.setLevel(entity.getLevel());
+            dto.setAge(entity.getAge());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setGender(entity.getGender());
+            dtoList.add(dto);
+        }
+
+        Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
+        return response;
+    }
+
+    public Page<StudentDTO> paginationWithName(String name, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "birthDate");
+        Pageable paging = PageRequest.of(page - 1, size, sort);
+        Page<StudentEntity> pageObj = studentRepository.findAllByName(name, paging);
+
+        Long totalCount = pageObj.getTotalElements();
+        List<StudentEntity> entityList = pageObj.getContent();
+        List<StudentDTO> dtoList = new LinkedList<>();
+        for (StudentEntity entity : entityList) {
+            StudentDTO dto = new StudentDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setSurname(entity.getSurname());
+            dto.setLevel(entity.getLevel());
+            dto.setAge(entity.getAge());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setGender(entity.getGender());
+            dtoList.add(dto);
+        }
+        Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
+        return response;
+    }
+
+    public Page<StudentDTO> paginationWithLevel(Integer level, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable paging = PageRequest.of(page - 1, size, sort);
+        Page<StudentEntity> pageObj = studentRepository.findAllByLevel(level, paging);
+
+        Long totalCount = pageObj.getTotalElements();
+        List<StudentEntity> entityList = pageObj.getContent();
+        List<StudentDTO> dtoList = new LinkedList<>();
+        for (StudentEntity entity : entityList) {
+            StudentDTO dto = new StudentDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setSurname(entity.getSurname());
+            dto.setLevel(entity.getLevel());
+            dto.setAge(entity.getAge());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setGender(entity.getGender());
+            dtoList.add(dto);
+        }
+        Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
+        return response;
+    }
+
+    public Page<StudentDTO> paginationWithGender(Gender gender, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "birthDate");
+        Pageable paging = PageRequest.of(page - 1, size, sort);
+
+        Page<StudentEntity> pageObj = studentRepository.findAllByGender(gender, paging);
+        Long totalCount = pageObj.getTotalElements();
+        List<StudentEntity> entityList = pageObj.getContent();
+        List<StudentDTO> dtoList = new LinkedList<>();
+        for (StudentEntity entity : entityList) {
+            StudentDTO dto = new StudentDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setSurname(entity.getSurname());
+            dto.setLevel(entity.getLevel());
+            dto.setAge(entity.getAge());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setGender(entity.getGender());
+            dtoList.add(dto);
+        }
+        Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
+        return response;
+
+    }
 }

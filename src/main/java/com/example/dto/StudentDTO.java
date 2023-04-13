@@ -5,6 +5,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter @Setter
 public class StudentDTO {
     private Integer id;
@@ -13,4 +15,5 @@ public class StudentDTO {
     private Integer age;
     private Gender gender;
     private Integer level;
+    private LocalDate CreatedDate;
 }

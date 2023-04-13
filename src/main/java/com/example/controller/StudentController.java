@@ -98,7 +98,7 @@ public class StudentController {
     @GetMapping(value = "/get-by-between-date")
     public ResponseEntity<?> getByBetweenDate (@RequestBody BetweenDate betweenDate){
         try {
-            return ResponseEntity.ok(studentService.getByBetweenCreatedDate(betweenDate));
+            return ResponseEntity.ok(studentService.getByBetweenCreatedDate(betweenDate.getStart(),betweenDate.getFinish()));
         }catch (AppBadRequestException e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -122,11 +122,25 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-//    @PostMapping(value = "/paging-name")
-//    public ResponseEntity<Page<StudentDTO>> pagingWithName(@RequestParam(value = "page", defaultValue = "1") int page,
-//                                                           @RequestParam(value = "size", defaultValue = "30") int size,
-//                                                           @RequestBody StudentFilterRequestDTO filter) {
-//        Page<StudentDTO> response = studentService.paginationWithName(filter.getName(), page, size);
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping(value = "/paging")
+    public ResponseEntity<Page<StudentDTO>> paging(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                   @RequestParam(value = "size", defaultValue = "3") int size) {
+        return ResponseEntity.ok(studentService.pagination(page, size));
+    }
+
+    @GetMapping(value = "/paging-level/{level}")
+    public ResponseEntity<Page<StudentDTO>> pagingWithLevel(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                            @RequestParam(value = "size", defaultValue = "3") int size,
+                                                            @PathVariable("level") Integer level) {
+        Page<StudentDTO> response = studentService.paginationWithLevel(level, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/paging-gender/{gender}")
+    public ResponseEntity<Page<StudentDTO>> pagingWithGender(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                             @RequestParam(value = "size", defaultValue = "3") int size,
+                                                             @PathVariable("gender") Gender gender) {
+        Page<StudentDTO> response = studentService.paginationWithGender(gender, page, size);
+        return ResponseEntity.ok(response);
+    }
 }

@@ -14,62 +14,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends CrudRepository<StudentEntity,Integer > {
-    @Override
-    <S extends StudentEntity> S save(S entity);
+public interface StudentRepository extends CrudRepository<StudentEntity,Integer > ,
+        PagingAndSortingRepository<StudentEntity, Integer> {
+        List<StudentEntity> findBySurname(String surname);
+        List<StudentEntity> findByLevel(Integer level);
+        List<StudentEntity> findByAge(Integer age);
+        List<StudentEntity> findByBirthDate(LocalDate date);
+        List<StudentEntity> findByName(String name);
+        List<StudentEntity> findByGender(Gender gender);
+        List<StudentEntity> findByBirthDateBetween(LocalDate date1, LocalDate date2);
+        Page<StudentEntity> findAllByName(String name, Pageable pageable);
 
-    @Override
-    <S extends StudentEntity> Iterable<S> saveAll(Iterable<S> entities);
-
-    @Override
-    Optional<StudentEntity> findById(Integer integer);
-    StudentEntity findByLevel(Integer level);
-    StudentEntity findBySurname(String surname);
-    StudentEntity findByName(String name);
-    StudentEntity findByAge(Integer age);
-    StudentEntity findByGender(Gender gender);
-    List<StudentEntity> findAllByCreatedDate(LocalDate createdDate);
-    List<StudentEntity> findAllByCreatedDateBetween(LocalDate toCreatedDate,LocalDate fromCreatedDate);
-    @Override
-    boolean existsById(Integer integer);
-
-    @Override
-    Iterable<StudentEntity> findAll();
-    @Override
-    Iterable<StudentEntity> findAllById(Iterable<Integer> integers);
-
-    @Override
-    long count();
-
-    @Override
-    void deleteById(Integer integer);
-
-    @Override
-    void delete(StudentEntity entity);
-
-    @Override
-    void deleteAllById(Iterable<? extends Integer> integers);
-
-    @Override
-    void deleteAll(Iterable<? extends StudentEntity> entities);
-
-    @Override
-    void deleteAll();
-    @Transactional
-    @Modifying
-    @Query("update StudentEntity set visible = :visible where id = :sid")
-    Integer changeVisibility(@Param("sid") Integer sid, @Param("visible") Boolean v);
-
-    @Query("from StudentEntity where name like ?1")
-    List<StudentEntity> findAllByName2 (String name);
-    @Query("select new StudentEntity (id,name,surname) from StudentEntity ")
-    List<StudentEntity> findByName4();
-
-//    @Query("SELECT new com.example.mapper.StudentMapper(id,name, phone) FROM StudentEntity ")
-//    List<StudentMapper> findByName5();
+        Page<StudentEntity> findAllByLevel(Integer level, Pageable paging);
+        Page<StudentEntity> findAllByGender(Gender gender, Pageable paging);
 }
