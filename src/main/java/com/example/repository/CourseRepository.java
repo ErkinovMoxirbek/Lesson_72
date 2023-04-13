@@ -2,51 +2,27 @@ package com.example.repository;
 
 import com.example.entity.CourseEntity;
 import com.example.entity.StudentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface CourseRepository  extends CrudRepository<CourseEntity,Integer > {
-    @Override
-    <S extends CourseEntity> S save(S entity);
+public interface CourseRepository  extends CrudRepository<CourseEntity,Integer > ,
+        PagingAndSortingRepository<CourseEntity, Integer>{
+        List<CourseEntity> findByName(String name);
+        List<CourseEntity> findByPrice(Double price);
+        List<CourseEntity> findByDuration(String duration);
+        List<CourseEntity> findByCreatedDateBetween(LocalDate date1, LocalDate date2);
 
-    @Override
-    <S extends CourseEntity> Iterable<S> saveAll(Iterable<S> entities);
+        List<CourseEntity> findByPriceBetween(Double price1, Double price2);
+        Page<CourseEntity> findAllByPrice(Double price, Pageable pageable);
 
-    @Override
-    Optional<CourseEntity> findById(Integer integer);
-    CourseEntity findByName (String name);
-    CourseEntity findByPrice (Double price);
-    CourseEntity findByDuration (Integer duration);
-    List<CourseEntity> findAllByPriceBetween (Double start ,Double finish);
-    List<CourseEntity> findAllByCreatedDateBetween (LocalDateTime start , LocalDateTime finish);
+        Page<CourseEntity> findByCreatedDateBetween(LocalDate date1, LocalDate date2, Pageable pageable);
 
-    @Override
-    boolean existsById(Integer integer);
-
-    @Override
-    Iterable<CourseEntity> findAll();
-
-    @Override
-    Iterable<CourseEntity> findAllById(Iterable<Integer> integers);
-
-    @Override
-    long count();
-
-    @Override
-    void deleteById(Integer integer);
-
-    @Override
-    void delete(CourseEntity entity);
-
-    @Override
-    void deleteAllById(Iterable<? extends Integer> integers);
-
-    @Override
-    void deleteAll(Iterable<? extends CourseEntity> entities);
-
-    @Override
-    void deleteAll();
+    Page<CourseEntity> findAll(Pageable pageable);
 }

@@ -6,6 +6,7 @@ import com.example.enums.Gender;
 import com.example.exp.AppBadRequestException;
 import com.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -121,4 +122,11 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+//    @PostMapping(value = "/paging-name")
+//    public ResponseEntity<Page<StudentDTO>> pagingWithName(@RequestParam(value = "page", defaultValue = "1") int page,
+//                                                           @RequestParam(value = "size", defaultValue = "30") int size,
+//                                                           @RequestBody StudentFilterRequestDTO filter) {
+//        Page<StudentDTO> response = studentService.paginationWithName(filter.getName(), page, size);
+//        return ResponseEntity.ok(response);
+//    }
 }

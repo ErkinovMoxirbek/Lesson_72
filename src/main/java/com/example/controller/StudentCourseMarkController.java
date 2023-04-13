@@ -6,6 +6,7 @@ import com.example.exp.AppBadRequestException;
 import com.example.service.CourseService;
 import com.example.service.StudentCourseMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -132,6 +133,14 @@ public class StudentCourseMarkController {
     public ResponseEntity<?> getByStudentIdLastMark(@PathVariable("id")Integer id){
         try {
             return ResponseEntity.ok(service.getByStudentIdLastMark(id));
+        }catch (AppBadRequestException e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    } @GetMapping(value = "/get-by-student-id-and-course-id-max-mark")
+    public ResponseEntity<?> getByStudentIdAndCourseIdMaxMark(@RequestParam("student_id") Integer sid,@RequestParam("course_id")Integer cid){
+        try {
+            return ResponseEntity.ok(service.getByStudentIdAndCourseIdMaxMark(sid,cid));
         }catch (AppBadRequestException e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());

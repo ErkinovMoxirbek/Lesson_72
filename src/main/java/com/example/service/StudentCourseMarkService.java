@@ -1,8 +1,10 @@
 package com.example.service;
 
+import com.example.dto.CourseDTO;
 import com.example.dto.StudentCourseMarkDTO;
 import com.example.entity.StudentCourseMarkEntity;
 import com.example.exp.AppBadRequestException;
+import com.example.mapper.CourseInfoMapper;
 import com.example.repository.StudentCourseMarkRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -220,5 +222,43 @@ public class StudentCourseMarkService {
             dto.setMark(entity.getMark());
             dto.setCreatedDate(entity.getCreatedDate());
             return dto;
+    }public StudentCourseMarkDTO getByStudentIdAndCourseIdMaxMark(Integer sid,Integer cid){
+            StudentCourseMarkEntity entity = repository.findByStudentIdAndCourseIdMaxMark(sid,cid);
+            StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
+            dto.setId(entity.getId());
+
+            dto.setStudentId(entity.getStudentId());
+            dto.setStudentName(studentService.getById(entity.getStudentId()).getName());
+            dto.setStudentSurname(studentService.getById(entity.getStudentId()).getSurname());
+
+            dto.setCourseId(entity.getCourseId());
+            dto.setCourseName(courseService.getById(entity.getCourseId()).getName());
+            dto.setMark(entity.getMark());
+            dto.setCreatedDate(entity.getCreatedDate());
+            return dto;
+    }
+    public void test() {
+        List<Object[]> courseObjList = repository.findLastCourseMarkerAsNative(1);
+        if (courseObjList.size() > 0) {
+            Object[] courseObj = courseObjList.get(0);
+
+            CourseDTO courseDTO = new CourseDTO();
+            courseDTO.setId((Integer) courseObj[0]);
+            courseDTO.setName((String) courseObj[1]);
+            System.out.println(courseDTO);
+        }
+
+        System.out.println("dasda");
+    }
+    public void test2() {
+        CourseInfoMapper courseInfoMapper = repository.findLastCourseMarkerAsNativeMapping(1);
+        if (courseInfoMapper != null) {
+            CourseDTO courseDTO = new CourseDTO();
+            courseDTO.setId(courseInfoMapper.getCId());
+            courseDTO.setName(courseInfoMapper.getCName());
+            System.out.println(courseDTO +" "+ courseInfoMapper.getMark());
+        }
+
+        System.out.println("dasda");
     }
 }

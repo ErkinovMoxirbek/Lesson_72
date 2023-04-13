@@ -7,6 +7,10 @@ import com.example.enums.Gender;
 import com.example.exp.AppBadRequestException;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -138,4 +142,40 @@ public class StudentService {
         }
         return optional;
     }
+//    public void pagingEntity(int page, int size){
+//        Sort sort = Sort.by(Sort.Direction.DESC,"createdDate");
+//        Pageable paginng = PageRequest.of(page - 1,size,sort);
+//        Page<StudentEntity> pageObj = studentRepository.findAll(paginng);
+//
+//        Long totalCount = pageObj.getTotalElements();
+//
+//        List<StudentEntity> entityList = new LinkedList<>();
+//        List<StudentDTO> dtoList = new LinkedList<>();
+//
+//        for (StudentEntity entity : entityList) {
+//            StudentDTO dto = new StudentDTO();
+//            dto.setId(entity.getId());
+//            dto.setName(entity.getName());
+//            dto.setSurname(entity.getSurname());
+//            dtoList.add(dto);
+//        }
+//    }
+//    public Page<StudentDTO> paginationWithName(String name, int page, int size) {
+//        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+//        Pageable paging = PageRequest.of(page - 1, size, sort);
+//        Page<StudentEntity> pageObj = studentRepository.findAllByName(name, paging);
+//
+//        Long totalCount = pageObj.getTotalElements();
+//        List<StudentEntity> entityList = pageObj.getContent();
+//        List<StudentDTO> dtoList = new LinkedList<>();
+//        for (StudentEntity entity : entityList) {
+//            StudentDTO dto = new StudentDTO();
+//            dto.setId(entity.getId());
+//            dto.setName(entity.getName());
+//            dto.setSurname(entity.getSurname());
+//            dtoList.add(dto);
+//        }
+//        Page<StudentDTO> response = new PageImpl<StudentDTO>(dtoList, paging, totalCount);
+//        return response;
+//    }
 }

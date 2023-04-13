@@ -8,7 +8,10 @@ import com.example.entity.StudentEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -21,98 +24,204 @@ public class CourseService {
         entity.setName(dto.getName());
         entity.setPrice(dto.getPrice());
         entity.setDuration(dto.getDuration());
-        if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new AppBadRequestException("Name qani?");
-        }
-        if (dto.getPrice() == null ) {
-            throw new AppBadRequestException("price qani?");
-        }if (dto.getDuration() == null ) {
-            throw new AppBadRequestException("duration qani?");
-        }
+        entity.setCreatedDate(dto.getCreatedDate());
+
         courseRepository.save(entity);
         dto.setId(entity.getId());
         return dto;
     }
-    public List<CourseEntity> getAll() {
+    public List<CourseDTO> getAll() {
         Iterable<CourseEntity> iterable = courseRepository.findAll();
-        List<CourseEntity> list = new LinkedList<>();
-        iterable.forEach(studentEntity -> {
-            CourseEntity entity  = new CourseEntity();
-            entity.setName(studentEntity.getName());
-            entity.setPrice(studentEntity.getPrice());
-            entity.setCreatedDate(studentEntity.getCreatedDate());
-            entity.setDuration(studentEntity.getDuration());
-            entity.setId(studentEntity.getId());
-            list.add(entity);
+        List<CourseDTO> dtoList = new LinkedList<>();
+        iterable.forEach(entity -> {
+            CourseDTO dto = new CourseDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setPrice(entity.getPrice());
+            dto.setDuration(entity.getDuration());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dtoList.add(dto);
         });
-        return list;
+        return dtoList;
     }
-
-    public CourseEntity getById(Integer id) {
+    public CourseDTO getById(Integer id) {
+        CourseEntity entity = get(id);
+        CourseDTO dto = new CourseDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setPrice(entity.getPrice());
+        dto.setDuration(entity.getDuration());
+        dto.setCreatedDate(entity.getCreatedDate());
+        return dto;
+    }
+    public List<CourseDTO> toDTO(List<CourseEntity> entityList){
+        List<CourseDTO> dtoList = new LinkedList<>();
+        for (CourseEntity entity : entityList) {
+            CourseDTO dto = new CourseDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setPrice(entity.getPrice());
+            dto.setDuration(entity.getDuration());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+    public CourseEntity get(Integer id) {
         Optional<CourseEntity> optional = courseRepository.findById(id);
-        if (optional.isEmpty()){
-            throw new AppBadRequestException("Student not found :" + id);
+        if (optional.isEmpty()) {
+            throw new AppBadRequestException("Course not found: " + id);
         }
         return optional.get();
     }
+    public Boolean updateById(Integer id, CourseDTO courseDto) {
+        CourseEntity entity = get(id);
 
-    public Boolean update(Integer id, CourseDTO studentDTO) {
-        CourseEntity entity = getById(id);
-        if (studentDTO.getName() != null ){
-            entity.setName(studentDTO.getName());
-            System.out.println("update name");
+        if (entity == null) {
+            throw new AppBadRequestException("Student not found: " + id);
         }
-        if (studentDTO.getPrice() != null){
-            entity.setPrice(studentDTO.getPrice());
-            System.out.println("update price");
-        }
-        if (studentDTO.getDuration() != null ){
-            entity.setDuration(studentDTO.getDuration());
-            System.out.println("update duration");
-        }
+
+        entity.setName(courseDto.getName());
+        entity.setPrice(courseDto.getPrice());
+        entity.setDuration(courseDto.getDuration());
+        entity.setCreatedDate(courseDto.getCreatedDate());
 
         courseRepository.save(entity);
         return true;
     }
+    public Boolean deleteById(Integer id) {
+        CourseEntity entity = get(id);
 
-    public Boolean delete(Integer id) {
-        CourseEntity entity = getById(id);
+        if (entity == null) {
+            throw new AppBadRequestException("Student not found: " + id);
+        }
         courseRepository.delete(entity);
         return true;
     }
-    public CourseEntity getByName(String name) {
-        CourseEntity optional = courseRepository.findByName(name);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + name);
+
+    public List<CourseDTO> getByName(String name) {
+        List<CourseEntity> list = courseRepository.findByName(name);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No course found with this name: " + name);
         }
-        return optional;
-    } public CourseEntity getByPrice(Double price) {
-        CourseEntity optional = courseRepository.findByPrice(price);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + price);
-        }
-        return optional;
-    } public CourseEntity getByDuration(Integer duration) {
-        CourseEntity optional = courseRepository.findByDuration(duration);
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + duration);
-        }
-        return optional;
+        return toDTO(list);
     }
-    public List<CourseEntity> getByBetweenPrice(BetweenPrice betweenPrice) {
-        List<CourseEntity> optional = courseRepository.findAllByPriceBetween(betweenPrice.getStart(),betweenPrice.getFinish());
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + betweenPrice.toString());
+    public List<CourseDTO> getByPrice(Double price) {
+        List<CourseEntity> list = courseRepository.findByPrice(price);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No course found with this price: " + price);
         }
-        return optional;
+        return toDTO(list);
     }
-    public List<CourseEntity> getByBetweenCreatedDate(BetweenDate betweenDate) {
-        List<CourseEntity> optional = courseRepository.findAllByCreatedDateBetween(betweenDate.getStart(),betweenDate.getFinish());
-        if (optional == null){
-            throw new AppBadRequestException("Student not found :" + betweenDate.toString());
+    public List<CourseDTO> getByDuration(String duration) {
+        List<CourseEntity> list = courseRepository.findByDuration(duration);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No course found with this duration: " + duration);
         }
-        return optional;
+        return toDTO(list);
     }
 
+    public List<CourseDTO> getByCourseListPriceBetween(Double price1, Double price2) {
+        List<CourseEntity> list = courseRepository.findByPriceBetween(price1, price2);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No course found with this prices between: ");
+        }
+        return toDTO(list);
+    }
+
+    public List<CourseDTO> getByCourseListCreatedDateBetween(LocalDate date1, LocalDate date2) {
+        List<CourseEntity> list = courseRepository.findByCreatedDateBetween(date1, date2);
+        if (list.isEmpty()) {
+            throw new AppBadRequestException("No course found with this createdDate between: ");
+        }
+        return toDTO(list);
+    }
+
+    public Page<CourseDTO> paginationById(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        Page<CourseEntity> page1 = courseRepository.findAll(pageable);
+        Long totalCount = page1.getTotalElements();
+        List<CourseEntity> entityList = page1.getContent();
+        List<CourseDTO> dtoList = new LinkedList<>();
+
+        for (CourseEntity entity : entityList) {
+            CourseDTO dto = new CourseDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setPrice(entity.getPrice());
+            dto.setDuration(entity.getDuration());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dtoList.add(dto);
+        }
+        Page<CourseDTO> response = new PageImpl<CourseDTO>(dtoList, pageable, totalCount);
+        return response;
+    }
+    public Page<CourseDTO> paginationByCreatedDate(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        Page<CourseEntity> page1 = courseRepository.findAll(pageable);
+        Long totalCount = page1.getTotalElements();
+        List<CourseEntity> entityList = page1.getContent();
+        List<CourseDTO> dtoList = new LinkedList<>();
+
+        for (CourseEntity entity : entityList) {
+            CourseDTO dto = new CourseDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setPrice(entity.getPrice());
+            dto.setDuration(entity.getDuration());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dtoList.add(dto);
+        }
+        Page<CourseDTO> response = new PageImpl<CourseDTO>(dtoList, pageable, totalCount);
+        return response;
+
+    }
+
+    public Page<CourseDTO> pagingByPriceWithCreatedDate(Double price, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        Page<CourseEntity> page1 = courseRepository.findAllByPrice(price, pageable);
+        Long totalCount = page1.getTotalElements();
+        List<CourseEntity> entityList = page1.getContent();
+        List<CourseDTO> dtoList = new LinkedList<>();
+
+        for (CourseEntity entity : entityList) {
+            CourseDTO dto = new CourseDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setPrice(entity.getPrice());
+            dto.setDuration(entity.getDuration());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dtoList.add(dto);
+        }
+        Page<CourseDTO> response = new PageImpl<CourseDTO>(dtoList, pageable, totalCount);
+        return response;
+    }
+
+    public Page<CourseDTO> pagingByPricesWithCreateDateBetween(LocalDate date1, LocalDate date2, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        Page<CourseEntity> page1 =  courseRepository.findByCreatedDateBetween(date1, date2, pageable);
+        Long totalCount = page1.getTotalElements();
+        List<CourseEntity> entityList = page1.getContent();
+        List<CourseDTO> dtoList = new LinkedList<>();
+        for (CourseEntity entity : entityList) {
+            CourseDTO dto = new CourseDTO();
+            dto.setId(entity.getId());
+            dto.setName(entity.getName());
+            dto.setPrice(entity.getPrice());
+            dto.setDuration(entity.getDuration());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dtoList.add(dto);
+        }
+        Page<CourseDTO> response = new PageImpl<CourseDTO>(dtoList, pageable, totalCount);
+        return response;
+    }
 
 }

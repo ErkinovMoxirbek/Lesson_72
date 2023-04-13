@@ -3,7 +3,7 @@ PUT localhost:8082/SCM/create
 Content-Type: application/json
 
 {
-  "studentId": "3",
+  "studentId": "26",
   "courseId": "2",
   "mark": 3
 }
@@ -30,3 +30,5 @@ GET localhost:8082/SCM/list
 GET localhost:8082/SCM/get-by-created-date-with-detail/2023-04-09
 ### SCM get-by-student-id-last-mark
 GET localhost:8082/SCM/get-by-student-id-last-mark/3
+### SCM get-by-student-id-and-course-id-max-mark
+GET localhost:8082/SCM/get-by-student-id-and-course-id-max-mark?student_id=3&course_id=2

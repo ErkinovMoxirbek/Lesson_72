@@ -3,17 +3,20 @@ package com.example.repository;
 import com.example.entity.CourseEntity;
 import com.example.entity.StudentCourseMarkEntity;
 import com.example.entity.StudentEntity;
+import com.example.mapper.CourseInfoMapper;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentCourseMarkRepository extends CrudRepository<StudentCourseMarkEntity,Integer > {
+public interface StudentCourseMarkRepository extends CrudRepository<StudentCourseMarkEntity,Integer >  {
     @Override
     <S extends StudentCourseMarkEntity> S save(S entity);
 
@@ -61,5 +64,19 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
     @Modifying
     @Query("select StudentCourseMarkEntity from StudentCourseMarkEntity where createdDate = (select max(createdDate) from StudentCourseMarkEntity where  studentId = :id)")
     StudentCourseMarkEntity findByStudentIdLastMark (@Param("id")Integer id);
-
+    @Query("select StudentCourseMarkEntity from StudentCourseMarkEntity where mark = (select max (mark) from StudentCourseMarkEntity where studentId = :sid and courseId = :cid)")
+    StudentCourseMarkEntity findByStudentIdAndCourseIdMaxMark(@Param("sid") Integer sid,@Param("cid")Integer cid);
+    @Query(value = "SELECT c.id, c.name " +
+            " from  student_course_mark as scm " +
+            " inner join course_t as c on c.id = scm.course_id " +
+            " where scm.student_id = :stude         ntId  " +
+            "order by scm.created_date desc limit 1 ", nativeQuery = true)
+    List<Object[]> findLastCourseMarkerAsNative(@Param("studentId") Integer studentId);
+    @Query(value = "SELECT scm.student_id as sId, scm.mark as mark, " +
+            "  c.id as cId, c.name as cName " +
+            " from  student_course_mark as scm " +
+            " inner join course_t as c on c.id = scm.course_id " +
+            " where scm.student_id = :studentId  " +
+            "order by scm.created_date desc limit 1 ", nativeQuery = true)
+    CourseInfoMapper findLastCourseMarkerAsNativeMapping(@Param("studentId") Integer studentId);
 }

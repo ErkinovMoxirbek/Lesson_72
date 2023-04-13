@@ -4,9 +4,12 @@ import com.example.entity.StudentEntity;
 import com.example.enums.Gender;
 import com.example.mapper.StudentMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +40,6 @@ public interface StudentRepository extends CrudRepository<StudentEntity,Integer 
 
     @Override
     Iterable<StudentEntity> findAll();
-
     @Override
     Iterable<StudentEntity> findAllById(Iterable<Integer> integers);
 
@@ -67,6 +69,7 @@ public interface StudentRepository extends CrudRepository<StudentEntity,Integer 
     List<StudentEntity> findAllByName2 (String name);
     @Query("select new StudentEntity (id,name,surname) from StudentEntity ")
     List<StudentEntity> findByName4();
+
 //    @Query("SELECT new com.example.mapper.StudentMapper(id,name, phone) FROM StudentEntity ")
 //    List<StudentMapper> findByName5();
 }
